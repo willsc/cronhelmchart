@@ -1,0 +1,20 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Values.CronJob.name }}
+  namespace: {{ .Values.CronJob.namespace }}
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:      
+          containers:
+            - name: {{ .Values.Containers.name }}
+              image: "{{ .Values.image.app }}"
+              args:
+              - /bin/sh
+              - -c
+              -  date; echo hello from k8s cluster
+              imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          restartPolicy: OnFailure
